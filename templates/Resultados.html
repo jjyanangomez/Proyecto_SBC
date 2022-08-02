@@ -16,12 +16,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% set count = namespace(value = 0) %}
                 {% for results in resultsQuery['results']['bindings'] %}
                 <tr>
-                    {% set count.value = count.value + 1 %}
                     <td style="text-align: center;">
-                        {{ results['document]['value'] }}
+                        {{ results['document']['value'] }}
                     </td>
                     <td style="text-align: center;">
                         {{ results['autor_name']['value'] }}

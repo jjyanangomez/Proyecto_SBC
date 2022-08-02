@@ -111,6 +111,7 @@ def buscarPublicacionDOI():
     sparql.setReturnFormat(JSON)
     cont = 0
     qres = sparql.query().convert()
+    #print(qres)
     print('\nRESULTADOS ENCONTRADOS:\n')
     for res in qres['results']['bindings']:
         print('Uri: ' + res['document']['value'])

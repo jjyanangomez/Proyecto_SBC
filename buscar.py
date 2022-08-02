@@ -1,3 +1,4 @@
+from matplotlib.pyplot import text
 from rdflib import Graph
 from SPARQLWrapper import SPARQLWrapper, JSON, N3
 from flask import Flask, render_template, request
@@ -17,15 +18,16 @@ def init():
 def buscar():
     if request.method == 'POST':
         textoBuscar = request.form['textoBuscar']
+        print(textoBuscar)
         if "Buscar" in request.form :
             if request.form == "Autor":
                 sparql.setQuery("""
                 PREFIX bibo: <http://purl.org/ontology/bibo/>
                 PREFIX dct: <http://purl.org/dc/terms/>
                 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-                SELECT ?document ?name ?date ?language ?nombre_autor ?volume
+                SELECT ?document ?name ?date ?language ?autor_name ?volume
                 WHERE{  
-                    values ?nombre_autor {'"""+textoBuscar+"""'}
+                    values ?autor_name {'"""+textoBuscar+"""'}
                     ?document a bibo:Document .
                     ?document dct:title ?name .
                     ?document dct:date ?date .  
@@ -33,7 +35,7 @@ def buscar():
                     ?document dct:language ?language .
                     ?document bibo:volume ?volume .
                     ?document dct:creator ?autor .
-                    ?autor foaf:name ?nombre_autor
+                    ?autor foaf:name ?autor_name
                     }
                 """)
             else:
@@ -42,9 +44,9 @@ def buscar():
                     PREFIX bibo: <http://purl.org/ontology/bibo/>
                     PREFIX dct: <http://purl.org/dc/terms/>
                     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-                    SELECT ?document ?name ?date ?language ?nombre_autor ?volume
+                    SELECT ?document ?name ?date ?language ?autor_name ?volume
                     WHERE{  
-                        values ?nombre_autor {'"""+textoBuscar+"""'}
+                        values ?date{'"""+textoBuscar+"""'}
                         ?document a bibo:Document .
                         ?document dct:title ?name .
                         ?document dct:date ?date .  
@@ -52,7 +54,7 @@ def buscar():
                         ?document dct:language ?language .
                         ?document bibo:volume ?volume .
                         ?document dct:creator ?autor .
-                        ?autor foaf:name ?nombre_autor
+                        ?autor foaf:name ?autor_name
                         }
                     """)
                 else:
@@ -62,7 +64,7 @@ def buscar():
                     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
                     SELECT ?document ?name ?date ?language ?volume ?autor_name
                     WHERE{ 
-                        values ?doi{'"""+ textoBuscar+"""'}
+                        values ?doi{'"""+textoBuscar+"""'}
                         ?document a bibo:Document .
                         ?document dct:title ?name .
                         ?document dct:date ?date .  
@@ -75,11 +77,13 @@ def buscar():
                     """)
 
             sparql.setReturnFormat(JSON)
-            
+            print("------------------")
             qres = sparql.query().convert()
+            print(qres)
+            
             #print('\nRESULTADOS ENCONTRADOS:\n')
             if qres:
-                return render_template('Resultados.html', resultsQuery=qres)
+                return render_template('Resultados.html', resultsQuery =qres)
 
 
 app.run(host='localhost', port=5000, debug=True)
