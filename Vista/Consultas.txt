@@ -1,0 +1,40 @@
+---------
+-
+-   Publicaciones que hablen sobre la educación en su Resumen
+-
+------------
+
+SELECT ?document ?name ?date ?doi WHERE{ values ?tema {'education'} 
+?document a bibo:Document . ?document dct:title ?name . ?document 
+dct:date ?date . ?document bibo:doi ?doi . ?document bibo:abstract 
+?abstract FILTER (CONTAINS(?abstract, ?tema)) }
+
+---------
+-
+-  Publicaciones que pertenezcan al autor Mukhalalati B.A.
+-
+------------
+
+SELECT ?document ?name ?date WHERE{ values ?nombre_autor {'Mukhalalati 
+B.A.'} ?document a bibo:Document . ?document dct:title ?name . 
+?document dct:date ?date . ?document dct:creator ?autor . ?autor foaf:name 
+?nombre_autor }
+
+---------
+-
+-  Publicaciones tipo documento con su respectivo título y año
+-
+------------
+SELECT ?documento ?titulo ?anio WHERE{ { ?documento a bibo:Document . 
+?documento dct:title ?titulo . ?document dct:date ?anio . } UNION { ?documento a 
+bibo:Document . ?documento dct:title ?titulo . ?document dct:date ?anio . } }
+
+
+-----------
+-
+-  Publicaciones tipo Documento del año 2020
+-
+--------------
+SELECT ?document ?date WHERE{ values ?date {'2020'} ?document a bibo:Document 
+. ?document dct:date ?date . }
+
